@@ -11,6 +11,17 @@ helper rather than rewriting a formatter in scratch code.
 
 ## First use
 
+Check prerequisites before claiming the workflow is ready: Python 3.10+ with the
+skill's dependencies, file read/write access, the PMS address and project export
+permissions, and one usable data route. Browser export requires the user to sign
+in in a browser session this host can control, including MFA/VPN when required.
+Direct API access requires a separately configured valid token. A supplied CSV
+can be formatted offline. A login in another browser, a profile check, or the
+fictional demo does not establish live PMS access. Read
+[pms.md](references/pms.md) and guide the user through the selected route. If a
+prerequisite is missing, name the specific action needed and continue independent
+setup or the demo; do not attempt a live fetch without its required access.
+
 Find the profile named by the user or current project instructions. If none is
 configured, inspect the provided PMS project pages/export for names and IDs.
 Ask only for missing scope, timezone/week start and destination. Do not assume a
@@ -67,6 +78,7 @@ Complete and verify the draft attachment. Send only when explicitly instructed.
 
 ## Boundaries
 
-Only the Enosis-compatible PMS API/export is implemented. For another source,
-explain that an adapter is needed; do not treat unrelated Jira CSVs as PMS exports.
+Only the PMS API/export contract in [pms.md](references/pms.md) is implemented.
+For another source, explain that an adapter is needed; do not treat unrelated
+Jira CSVs as PMS exports.
 No KPI scoring, scheduling, PMS writes, or mail-provider integration is bundled.

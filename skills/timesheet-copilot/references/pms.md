@@ -1,14 +1,17 @@
 # PMS access and export contract
 
-This adapter targets the Enosis PMS API shape documented in the original skill.
-The origin is configurable; it is not an integration with every product called
-PMS. Endpoint contracts below are inherited from that workflow. Validate a real
-run before claiming acceptance on a new deployment.
+This adapter targets the PMS API and CSV contract documented below. The website
+address is configurable; this is not an integration with every product called
+PMS. Validate a real run before claiming acceptance on a new deployment.
 
 ## Browser export: no API credential setup
 
-Use the host's supported browser controls. Sign-in happens in the browser, by
-the user. For a configured project, navigate to:
+Check that the host can control a browser and access its downloads. Open the
+user's PMS website in that browser and have the user sign in there, complete MFA,
+and connect to a work VPN if needed. Do not assume a login in a different browser
+or profile is available to this host. Confirm the visible project and Export
+control before proceeding; missing permissions require the PMS administrator.
+For a configured project, navigate to:
 
 `<base_url>/all-projects/<project_id>/timesheet/weekly`
 
@@ -25,11 +28,55 @@ consistent but incomplete export; inspect the filters and compare with PMS.
 
 ## Direct API: existing approved credential
 
+Browser sign-in does not authenticate this helper. Direct API requests require
+a valid bearer access token supplied separately. Ask the user to obtain it from
+their PMS administrator or documented team process. Do not invent a token-issuing
+screen or endpoint. This skill does not obtain or renew tokens. If API access is
+unavailable, use browser export or a downloaded CSV.
+
+### Credential setup
+
 The helper accepts an environment variable named by `pms.token_env` (default
 `PMS_TOKEN`) **or** `pms.token_file`, a path to a plain token stored outside the
 skill/repository. Configure one, not both. For a token file on POSIX, permissions
 must exclude group/other access (normally `600`). On other systems use an
 appropriately restricted file ACL. The profile holds the path, never the token.
+
+For the simplest persistent local setup:
+
+1. Choose a private location with the user, outside the skill/repository and
+   accessible to the helper. Create an empty plain-text file with owner-only
+   permissions, without overwriting an existing credential. On POSIX, create it
+   with mode `600`; on Windows, restrict its ACL to the user's account.
+2. Have the user open it themselves, paste the complete token alone, and save.
+   Do not request or display its contents. Do not include `Bearer`, quotes,
+   username/password pairs, or JSON in the token file.
+3. Set `pms.token_file` to that file's path and remove `pms.token_env`. For example:
+
+   ```json
+   "pms": {
+     "base_url": "https://pms.example.com",
+     "token_file": "~/private-timesheets/pms-token.txt"
+   }
+   ```
+
+   This is the `pms` section of the user's profile. Use their actual PMS address
+   and file location. Paths are resolved relative to the profile unless absolute
+   or starting with `~`.
+4. After the user says it is saved, use the helper to fetch one explicitly
+   selected project/date range and compare with PMS. Never inspect the token
+   yourself to check that it was saved. The helper reads it internally.
+
+For an IT-managed environment, keep `"token_env": "PMS_TOKEN"` instead. The
+variable must be supplied to the process that actually runs the helper. Setting
+it in an unrelated terminal does not give it to an already running desktop
+assistant. A `.env` file is not loaded automatically. Ask IT to configure the
+host's secret/environment support, or use the token file method.
+
+The `check` command validates settings only; it makes no network request and
+does not validate credentials. An API 401/403 means the user must renew the token
+or check its project/export permissions, or switch to browser export. A browser
+login alone does not update the configured API token.
 
 Use the user's approved credential/secret-management workflow. Do not ask them
 to paste tokens in chat, inspect browser storage, scrape a password manager,

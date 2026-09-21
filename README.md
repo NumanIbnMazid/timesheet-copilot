@@ -10,12 +10,34 @@ A **skill** is a set of instructions and small helpers your AI assistant uses to
 do a particular job. Timesheet Copilot is one skill. This repository is simply
 the folder where its files are stored and shared.
 
-There is no separate app, server or paid API account to set up. You need your
-usual AI assistant, access to this private repository, and permission to view the
-relevant timesheets in PMS. Your assistant needs to be able to read files and run
-Python. Browser access helps it download exports; you can also download them yourself.
+There is no separate app or server to set up. Your assistant runs the skill's
+helpers, using PMS access you provide through one of the routes below.
 
 **You do not need to learn Git, write code, or run commands each week.**
+
+## Prerequisites: what you need first
+
+- **Access to this private repository** so you can download the skill.
+- **An assistant that can read files and run Python.** Python 3.10+ and the
+  packages in the skill's `requirements.txt` must be available in that assistant's
+  working environment. Ask the assistant to check and set this up for you.
+- **Permission to view and export the selected projects in PMS.** Have your PMS
+  website address and account ready. Connect to your work VPN if PMS requires it.
+- **One working way to get the data:**
+
+| Route | What you need to do |
+|---|---|
+| Browser export — easiest to start | Open PMS in a browser session your assistant can control, sign in yourself, and complete any verification step. Keep that session open. |
+| Direct API download — optional | Obtain a valid PMS API access token through your PMS administrator or your team's approved process, then store it privately as described in the guide. |
+| Downloaded CSV | Sign in yourself, export the selected project and dates from PMS, and give the CSV to the assistant. The assistant needs no live PMS login to format that file. |
+
+**Signing in to PMS does not automatically sign in the Python helper.** Browser
+export uses the browser session; direct API download uses a separately configured
+token. Without either, provide a downloaded CSV. The skill cannot fetch private
+timesheets using only a project name or website address.
+
+Follow the [step-by-step PMS access setup](docs/start-here.md#connect-to-pms) for
+your chosen route. A mail connection is needed only if you ask for mailbox drafts.
 
 ## Start here
 
@@ -27,15 +49,17 @@ Python. Browser access helps it download exports; you can also download them you
 
    > Set up Timesheet Copilot using the skill in this folder. Help me choose my
    > PMS projects, where to save the files, and which day my week starts.
+   > Check the prerequisites and help me connect to PMS using browser export.
    > Keep my settings outside the skill folder. Run the fictional example first.
 
-4. Sign in to PMS normally in the browser when needed. Then say:
+4. Complete the PMS access steps above. Ask the assistant to confirm it can see
+   your selected project and export its timesheet, then say:
 
    > Prepare last week's timesheet for my project.
 
-Your assistant handles the helper setup. Python 3.10 or newer and the packages
-listed in the skill's `requirements.txt` are needed. If Python is missing, it
-will explain that one-time installation before continuing.
+Your assistant handles the helper setup. If Python, PMS access, or an export
+permission is missing, it explains the specific next step before attempting a
+real run. The fictional example works without a PMS account.
 
 For using it from other folders or in a skill-upload interface, see the
 [short setup guide](docs/start-here.md). The assistant can install the skill for you.
@@ -71,10 +95,11 @@ signature, client template, or permission to send are built into the skill.
 
 ## Supported today
 
-The **Enosis-compatible PMS timesheet export and API** are supported. “PMS” does
-not mean every project-management system. Teams using the same PMS can supply
-their own projects and settings. Browser downloads work without setting up an
-API credential. An existing approved API credential enables direct downloads.
+The **PMS timesheet export and API described in the
+[PMS format reference](skills/timesheet-copilot/references/pms.md)** are supported.
+“PMS” does not mean every project-management system. Teams whose PMS uses that
+format can supply their own projects and settings. Browser export requires a
+signed-in session; direct API download requires a valid configured token.
 
 Jira and other time-log sources can be added later. They are not implemented in
 this version. See [development and verification](docs/development.md) for the

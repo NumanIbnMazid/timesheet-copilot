@@ -1,4 +1,4 @@
-"""Read-only adapter for the Enosis-compatible PMS API described in pms.md."""
+"""Read-only adapter for the PMS API contract described in pms.md."""
 from __future__ import annotations
 
 import json
@@ -51,7 +51,7 @@ class PMS:
                 data = response.read(MAX_BYTES + 1)
         except HTTPError as exc:
             if exc.code in (401, 403):
-                raise TimesheetError("PMS denied access. Sign in again or use the browser export route.") from None
+                raise TimesheetError("PMS denied API access. Renew the configured token or check project permissions, or use browser export. Browser sign-in does not refresh this token.") from None
             raise TimesheetError(f"PMS request failed (HTTP {exc.code}). No timesheet was verified; retry after resolving PMS access.") from None
         except (URLError, TimeoutError, OSError):
             raise TimesheetError("PMS could not be reached. Check the connection or use a downloaded export.") from None
