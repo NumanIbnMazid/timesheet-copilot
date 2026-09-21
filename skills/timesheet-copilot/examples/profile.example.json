@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "source": "pms",
+  "pms": {
+    "base_url": "https://pms.example.com",
+    "token_env": "PMS_TOKEN"
+  },
+  "timezone": "Asia/Dhaka",
+  "week_starts_on": "sunday",
+  "output_dir": "./timesheets",
+  "filename_prefix": "Example Team",
+  "projects": [
+    {
+      "key": "atlas",
+      "id": 101,
+      "name": "Example Atlas",
+      "label": "Atlas",
+      "active": true
+    }
+  ]
+}

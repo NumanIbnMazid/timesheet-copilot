@@ -1,0 +1,4 @@
+interface:
+  display_name: "Timesheet Copilot"
+  short_description: "Prepare checked Excel timesheets from PMS"
+  default_prompt: "Use $timesheet-copilot to prepare last week's timesheets for my configured projects."
